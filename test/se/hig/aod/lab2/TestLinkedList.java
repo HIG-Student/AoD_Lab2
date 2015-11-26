@@ -317,7 +317,6 @@ public class TestLinkedList
 
         for (int i = 0; i <= 10; i++)
         {
-            System.out.println(i + " , " + testList.get(i));
             assertEquals("Not correct get", (Integer) i, testList.get(i));
         }
 
@@ -343,11 +342,8 @@ public class TestLinkedList
         testList.insertFirst(0);
         testList.insertLast(10);
 
-        testList.printList();
         testList.remove(7);
-        testList.printList();
         testList.remove(5);
-        testList.printList();
 
         int index = 0;
         for (int i = 0; i <= 10; i++)
