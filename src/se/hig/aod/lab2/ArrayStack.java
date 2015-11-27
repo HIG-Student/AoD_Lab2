@@ -3,6 +3,9 @@ package se.hig.aod.lab2;
 /**
  * A stack that uses an fixed-size array to store element
  * 
+ * 
+ * @param <V> type to store
+ *  
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
 public class ArrayStack<V> implements Stack<V>
@@ -11,6 +14,11 @@ public class ArrayStack<V> implements Stack<V>
     int size;
     Object[] array;
 
+    /**
+     * Create ArrayStack of specified size
+     * 
+     * @param maxSize the size of the ArrayStack
+     */
     public ArrayStack(int maxSize)
     {
         this.maxSize = maxSize;
@@ -30,6 +38,11 @@ public class ArrayStack<V> implements Stack<V>
         return size == 0;
     }
     
+    /**
+     * Check if the stack is full
+     * 
+     * @return true if the stack is full, else false
+     */
     public boolean isFull()
     {
         return size == maxSize;

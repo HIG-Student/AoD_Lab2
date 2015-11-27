@@ -3,6 +3,9 @@ package se.hig.aod.lab2;
 import static org.junit.Assert.*;
 import static se.hig.aod.lab2.T.*;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -405,12 +408,12 @@ public class TestLinkedList
     public void testPrint()
     {
         populate();
-        
+
         String resultIterative = checkSystemOut(() -> testList.printList());
         String resultRecursive = checkSystemOut(() -> testList.printListR());
 
         assertEquals("Recursive and iterative should give same result!", resultIterative, resultRecursive);
-        
+
         testList.printListR();
         testList.reversePrintList();
     }
@@ -446,6 +449,9 @@ public class TestLinkedList
         });
     }
 
+    /**
+     * Test search
+     */
     @Test
     public void testSearch()
     {
@@ -453,9 +459,12 @@ public class TestLinkedList
         populate();
         testList.insertLast(1000);
 
-        assertEquals("Can't find the elements", 2, ((LinkedList<Integer>) testList).search(1000).getSize());
+        assertEquals("Can't find the elements", 2, testList.search(1000).getSize());
     }
 
+    /**
+     * Test to use search for removing elements
+     */
     @Test
     public void testSearchRemove()
     {
@@ -463,12 +472,15 @@ public class TestLinkedList
         populate();
         testList.insertLast(1000);
 
-        ((LinkedList<Integer>) testList).search(1000).get(0).remove();
-        assertEquals("Element not removed!", 1, ((LinkedList<Integer>) testList).search(1000).getSize());
-        ((LinkedList<Integer>) testList).search(1000).get(0).remove();
-        assertEquals("Element not removed!", 0, ((LinkedList<Integer>) testList).search(1000).getSize());
+        testList.search(1000).get(0).remove();
+        assertEquals("Element not removed!", 1, testList.search(1000).getSize());
+        testList.search(1000).get(0).remove();
+        assertEquals("Element not removed!", 0, testList.search(1000).getSize());
     }
 
+    /**
+     * Test to use search for removing elements (index out of bounds)
+     */
     @Test(expected = LinkedList.IndexOutOfBoundsException.class)
     public void testSearchRemoveTooMuch()
     {
@@ -476,13 +488,16 @@ public class TestLinkedList
         populate();
         testList.insertLast(1000);
 
-        ((LinkedList<Integer>) testList).search(1000).get(0).remove();
-        assertEquals("Element not removed!", 1, ((LinkedList<Integer>) testList).search(1000).getSize());
-        ((LinkedList<Integer>) testList).search(1000).get(0).remove();
-        assertEquals("Element not removed!", 0, ((LinkedList<Integer>) testList).search(1000).getSize());
-        ((LinkedList<Integer>) testList).search(1000).get(0).remove();
+        testList.search(1000).get(0).remove();
+        assertEquals("Element not removed!", 1, testList.search(1000).getSize());
+        testList.search(1000).get(0).remove();
+        assertEquals("Element not removed!", 0, testList.search(1000).getSize());
+        testList.search(1000).get(0).remove();
     }
 
+    /**
+     * Test using search to remove elements
+     */
     @Test
     public void testSearchRemoveAll()
     {
@@ -490,8 +505,26 @@ public class TestLinkedList
         populate();
         testList.insertLast(1000);
 
-        ((LinkedList<Integer>) testList).search(1000).remove();
+        testList.search(1000).remove();
 
-        assertEquals("Elements not removed!", 0, ((LinkedList<Integer>) testList).search(1000).getSize());
+        assertEquals("Elements not removed!", 0, testList.search(1000).getSize());
+    }
+
+    /**
+     * Test iterate
+     */
+    @Test
+    public void testSearchIterate()
+    {
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+        stack.addLast(1111);
+        stack.addLast(2222);
+        populate();
+        stack.addLast(3333);
+
+        for (LinkedList<Integer>.Element element : testList.search(1000))
+        {
+            assertEquals("Incorrect search result!", stack.pop(), element.data);
+        }
     }
 }

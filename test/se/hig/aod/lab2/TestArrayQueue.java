@@ -13,6 +13,9 @@ import org.junit.Test;
  */
 public class TestArrayQueue
 {
+    /**
+     * The queue to test
+     */
     public ArrayQueue<Character> testQueue;
 
     /**
@@ -20,6 +23,9 @@ public class TestArrayQueue
      */
     char[] fixture = { 'a', 'b', 'c', 'd' };
 
+    /**
+     * Make queue
+     */
     @Before
     public void setUp()
     {

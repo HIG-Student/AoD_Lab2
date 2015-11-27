@@ -3,8 +3,12 @@ package se.hig.aod.lab2;
 /**
  * Extension of List that allows index-based operations
  * 
+ * 
+ * @param <T> type to store
+ *  
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
+@SuppressWarnings("hiding")
 public interface ExtendedList<T> extends List<T>
 {
     /**
@@ -70,7 +74,9 @@ public interface ExtendedList<T> extends List<T>
      * Exception class that signals if an operation that is not allowed has been
      * done on an empty list.
      * 
+     * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
      * @author Magnus Blom
+     * @version 2015-11-27
      */
     @SuppressWarnings("serial")
     public static class ListIsEmptyException extends RuntimeException
@@ -79,10 +85,12 @@ public interface ExtendedList<T> extends List<T>
          * A constructor tha takes a message about which error has been
          * generated. This can be written to the user when the exception is
          * catched.
+         * 
+         * @param message
+         *            that describes the error
          */
         public ListIsEmptyException(String message)
         {
-            // Call the parents constructor.
             super(message);
         }
     }

@@ -3,6 +3,9 @@ package se.hig.aod.lab2;
 /**
  * A queue that uses an fixed-size array to store element
  * 
+ * 
+ * @param <V> type to store
+ * 
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
 public class ArrayQueue<V> implements Queue<V>
@@ -13,6 +16,11 @@ public class ArrayQueue<V> implements Queue<V>
     boolean full = false;
     Object[] array;
 
+    /**
+     * Create ArrayQueue of specified size
+     * 
+     * @param maxSize the size of the ArrayQueue
+     */
     public ArrayQueue(int maxSize)
     {
         array = new Object[maxSize];
@@ -34,6 +42,11 @@ public class ArrayQueue<V> implements Queue<V>
         return !full && insertAt == takeAt;
     }
 
+    /**
+     * Check if the queue is full
+     * 
+     * @return true if the queue is full, else false
+     */
     public boolean isFull()
     {
         return full;

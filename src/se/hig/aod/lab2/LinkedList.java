@@ -1,23 +1,23 @@
 package se.hig.aod.lab2;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  * A double-linked list
+ * 
+ * @param <T> type to store
  * 
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
 @SuppressWarnings("hiding")
 public class LinkedList<T> implements ExtendedList<T>
 {
-    /**
-     * The first node in this list
-     */
-    public ListNode first;
-    /**
-     * The last node in this list
-     */
-    public ListNode last;
+    ListNode first;
 
-    public int size = 0;
+    ListNode last;
+
+    int size = 0;
 
     @Override
     public boolean isEmpty()
@@ -274,29 +274,31 @@ public class LinkedList<T> implements ExtendedList<T>
      * Search for an element in the list <br>
      * <br>
      * Example: Removing all 'g' characters from the list by using search
-     * 
      * <pre>
-     * {@code
-     * linkedList.search('g').remove();
-     * }
+     * <code>
+     *  linkedList.search('g').remove();
+     * </code>
      * </pre>
-     * 
      * Example: Count instances of character 'a'
-     * 
      * <pre>
-     * {
-     *     &#064;code
-     *     int count = linkedList.search('a').getSize();
-     * }
+     * <code>
+     *  int count = linkedList.search('a').getSize();
+     * </code>
      * </pre>
-     * 
      * Example: Check if the list contains 'b'
-     * 
      * <pre>
-     * {
-     *     &#064;code
-     *     boolean containsB = !linkedList.search('b').isEmpty();
-     * }
+     * <code>
+     *  boolean containsB = !linkedList.search('b').isEmpty();
+     * </code>
+     * </pre>
+     * Example: Iterate over results
+     * <pre>
+     * <code>
+     *  for(LinkedList<Integer>.Element element : testList.search(1000))
+     *  {
+     *      System.out.println(element);
+     *  }
+     * </code>
      * </pre>
      * 
      * @param element
@@ -350,17 +352,18 @@ public class LinkedList<T> implements ExtendedList<T>
      * <br>
      * It is possible to remove found elements by calling {@link Element#remove
      * remove} on the wrapper, or {@link SearchResult#remove remove} on this
-     * {@link SearchResult} to remove all findings from the list
+     * {@link SearchResult} to remove all findings from the list<br><br>
+     * For examples see {@link LinkedList#search(Object)}
      * 
      * 
      * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
      */
-    public class SearchResult
+    public class SearchResult implements Iterable<Element>
     {
         /**
          * The results of the search in the wrapper {@link Element}
          */
-        public Element[] results;
+        public final Element[] results;
 
         @SuppressWarnings("unchecked")
         SearchResult()
@@ -431,6 +434,32 @@ public class LinkedList<T> implements ExtendedList<T>
                 results[i] = nodes[i].getElement();
             }
         }
+
+        @Override
+        public Iterator<Element> iterator()
+        {
+            return new SearchResultIterator();
+        }
+
+        class SearchResultIterator implements Iterator<Element>
+        {
+            int index = 0;
+
+            @Override
+            public boolean hasNext()
+            {
+                return !isEmpty() && index < getSize();
+            }
+
+            @Override
+            public Element next()
+            {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+
+                return results[index++];
+            }
+        }
     }
 
     /**
@@ -460,6 +489,12 @@ public class LinkedList<T> implements ExtendedList<T>
         public void remove()
         {
             node.remove();
+        }
+
+        @Override
+        public String toString()
+        {
+            return data == null ? "null" : data.toString();
         }
     }
 
