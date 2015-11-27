@@ -5,6 +5,7 @@ package se.hig.aod.lab2;
  * 
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
+@SuppressWarnings("hiding")
 public class LinkedList<T> implements ExtendedList<T>
 {
     /**
@@ -244,15 +245,7 @@ public class LinkedList<T> implements ExtendedList<T>
         }
 
         StringBuilder builder = new StringBuilder();
-        ListNode current = last;
-
-        do
-        {
-            builder.append(current.data);
-            if (current.prev != null)
-                builder.append(" , ");
-        }
-        while ((current = current.prev) != null);
+        first.prependThisAndFollowing(builder);
 
         System.out.println(builder.toString());
     }
@@ -277,6 +270,40 @@ public class LinkedList<T> implements ExtendedList<T>
         return nodes;
     }
 
+    /**
+     * Search for an element in the list <br>
+     * <br>
+     * Example: Removing all 'g' characters from the list by using search
+     * 
+     * <pre>
+     * {@code
+     * linkedList.search('g').remove();
+     * }
+     * </pre>
+     * 
+     * Example: Count instances of character 'a'
+     * 
+     * <pre>
+     * {
+     *     &#064;code
+     *     int count = linkedList.search('a').getSize();
+     * }
+     * </pre>
+     * 
+     * Example: Check if the list contains 'b'
+     * 
+     * <pre>
+     * {
+     *     &#064;code
+     *     boolean containsB = !linkedList.search('b').isEmpty();
+     * }
+     * </pre>
+     * 
+     * @param element
+     *            the element to search for
+     * @return a {@link SearchResult} with the found elements
+     * 
+     */
     public SearchResult search(T element)
     {
         if (isEmpty())
@@ -315,8 +342,24 @@ public class LinkedList<T> implements ExtendedList<T>
         }
     }
 
+    /**
+     * Results from a search operation on the list<br>
+     * <br>
+     * Found elements are in {@link Element wrappers} in the
+     * {@link SearchResult#results results}<br>
+     * <br>
+     * It is possible to remove found elements by calling {@link Element#remove
+     * remove} on the wrapper, or {@link SearchResult#remove remove} on this
+     * {@link SearchResult} to remove all findings from the list
+     * 
+     * 
+     * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
+     */
     public class SearchResult
     {
+        /**
+         * The results of the search in the wrapper {@link Element}
+         */
         public Element[] results;
 
         @SuppressWarnings("unchecked")
@@ -330,12 +373,24 @@ public class LinkedList<T> implements ExtendedList<T>
             this.results = results;
         }
 
+        /**
+         * Removes all elements found in this search from the list
+         */
         public void remove()
         {
             for (Element e : results)
                 e.remove();
         }
 
+        /**
+         * Get a found element by index
+         * 
+         * @param index
+         *            the index in the results array
+         * @return the found element
+         * @throws IndexOutOfBoundsException
+         *             on invalid index
+         */
         public Element get(int index)
         {
             if (index < 0)
@@ -347,18 +402,28 @@ public class LinkedList<T> implements ExtendedList<T>
             return results[index];
         }
 
+        /**
+         * Check if there are no findings in this search
+         * 
+         * @return true if there are no findings, false if there is
+         */
         public boolean isEmpty()
         {
             return results.length == 0;
         }
 
+        /**
+         * Get the number of findings
+         * 
+         * @return the number of findings
+         */
         public int getSize()
         {
             return results.length;
         }
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        public SearchResult(LinkedList.ListNode[] nodes)
+        SearchResult(LinkedList.ListNode[] nodes)
         {
             results = new LinkedList.Element[nodes.length];
             for (int i = 0; i < nodes.length; i++)
@@ -368,8 +433,18 @@ public class LinkedList<T> implements ExtendedList<T>
         }
     }
 
+    /**
+     * Wrapper for a ListNode that only expose the data it is holding and a
+     * remove function
+     * 
+     * 
+     * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
+     */
     public class Element
     {
+        /**
+         * The data this element represents
+         */
         public final T data;
         private ListNode node;
 
@@ -379,6 +454,9 @@ public class LinkedList<T> implements ExtendedList<T>
             this.node = node;
         }
 
+        /**
+         * Remove the node that this element lays in from the list
+         */
         public void remove()
         {
             node.remove();
@@ -439,6 +517,21 @@ public class LinkedList<T> implements ExtendedList<T>
                 builder.append(" , ");
                 next.appendThisAndFollowing(builder);
             }
+
+            return builder;
+        }
+
+        StringBuilder prependThisAndFollowing(StringBuilder builder)
+        {
+            if (builder == null)
+                builder = new StringBuilder();
+
+            if (next != null)
+            {
+                next.prependThisAndFollowing(builder);
+                builder.append(" , ");
+            }
+            builder.append(data);
 
             return builder;
         }

@@ -3,10 +3,6 @@ package se.hig.aod.lab2;
 import static org.junit.Assert.*;
 import static se.hig.aod.lab2.T.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -408,10 +404,15 @@ public class TestLinkedList
     @Test
     public void testPrint()
     {
+        populate();
+        
         String resultIterative = checkSystemOut(() -> testList.printList());
         String resultRecursive = checkSystemOut(() -> testList.printListR());
 
         assertEquals("Recursive and iterative should give same result!", resultIterative, resultRecursive);
+        
+        testList.printListR();
+        testList.reversePrintList();
     }
 
     /**
