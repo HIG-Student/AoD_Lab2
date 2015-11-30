@@ -6,7 +6,8 @@ import java.util.NoSuchElementException;
 /**
  * A double-linked list
  * 
- * @param <T> type to store
+ * @param <T>
+ *            type to store
  * 
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
@@ -39,6 +40,67 @@ public class LinkedList<T> implements ExtendedList<T>
         return size;
     }
 
+    /**
+     * Insert multiple elements into the list from the front<br>
+     * <br>
+     * 
+     * [toAdd + LinkedList]
+     * 
+     * @param first
+     *            the first element to add
+     * @param toAdd
+     *            the elements to add
+     */
+    @SuppressWarnings("unchecked")
+    public void insertFirst(T first, T... toAdd)
+    {
+        if (toAdd == null)
+        {
+            insertFirst(null);
+            insertFirst(first);
+            return;
+        }
+        else
+        {
+            for (int i = toAdd.length - 1; i >= 0; i--)
+            {
+                insertFirst(toAdd[i]);
+            }
+            insertFirst(first);
+        }
+    }
+
+    /**
+     * Insert multiple elements into the list from the back<br>
+     * <br>
+     * 
+     * [LinkedList + toAdd]
+     * 
+     * @param first
+     *            the first element to add
+     * @param toAdd
+     *            the elements to add
+     */
+    @SuppressWarnings("unchecked")
+    public void insertLast(T first, T... toAdd)
+    {
+        if (toAdd == null)
+        {
+            insertLast(first);
+            insertLast(null);
+            return;
+        }
+        else
+        {
+            insertLast(first);
+
+            for (int i = 0; i < toAdd.length; i++)
+            {
+                insertLast(toAdd[i]);
+            }
+        }
+    }
+
     @Override
     public void insertFirst(T t)
     {
@@ -47,14 +109,12 @@ public class LinkedList<T> implements ExtendedList<T>
         {
             first = node;
             last = node;
+            size = 1;
         }
         else
         {
-            first.prev = node;
-            node.next = first;
-            first = node;
+            first.prepend(node);
         }
-        size++;
     }
 
     @Override
@@ -65,14 +125,12 @@ public class LinkedList<T> implements ExtendedList<T>
         {
             first = node;
             last = node;
+            size = 1;
         }
         else
         {
-            last.next = node;
-            node.prev = last;
-            last = node;
+            last.append(node);
         }
-        size++;
     }
 
     @Override
@@ -123,78 +181,111 @@ public class LinkedList<T> implements ExtendedList<T>
         return !search(t).isEmpty();
     }
 
+    /**
+     * Insert multiple elements
+     * 
+     * @param index
+     *            the index to insert at
+     * @param element
+     *            the first element
+     * @param elements
+     *            the following elements
+     * 
+     * @see #insert(int, Object)
+     */
+    @SuppressWarnings("unchecked")
+    public void insert(int index, T element, T... elements)
+    {
+        if (index < 0)
+            index = size + index + 1;
+
+        if (isEmpty())
+        {
+            if (index == -1)
+                index = 0;
+
+            if (index != 0)
+                throw new IndexOutOfBoundsException("Can't insert element at invalid position");
+
+            insertFirst(element, elements);
+        }
+        else
+        {
+            if (index == size)
+                insertLast(element, elements);
+            else
+            {
+                ListNode node;
+
+                getNodeAt(index).prepend(node = new ListNode(element));
+
+                if (elements == null)
+                    node.append(new ListNode(null));
+                else
+                    for (T e : elements)
+                        node.append(node = new ListNode(e));
+            }
+        }
+    }
+
     @Override
     public void insert(int index, T element)
     {
         if (index < 0)
-            index = size + index;
+            index = size + index + 1;
 
-        if (index >= size)
-            insertLast(element);
-        else
-            if (index <= 0)
-                insertFirst(element);
+        if (isEmpty())
+        {
+            if (index != 0)
+            {
+                throw new IndexOutOfBoundsException("Can't insert element at invalid position");
+            }
             else
-                if (index >= size - 1)
-                    insertLast(element);
-                else
-                {
-                    ListNode node = first;
-                    for (int i = 0; i < index; i++)
-                        node = node.next;
-
-                    ListNode newNode = new ListNode(element);
-
-                    newNode.next = node;
-                    newNode.prev = node.prev;
-                    if (node.prev != null)
-                        node.prev.next = newNode;
-                    node.prev = newNode;
-
-                    size++;
-                }
+            {
+                first = last = new ListNode(element);
+                size = 1;
+            }
+        }
+        else
+        {
+            if (index == size)
+                insertLast(element);
+            else
+                getNodeAt(index).prepend(new ListNode(element));
+        }
     }
 
     @Override
     public void remove(int index)
     {
-        if (index < 0)
-            index = size + index;
-
-        if (index >= size)
-            throw new IndexOutOfBoundsException("Can't get element at invalid position");
-        else
-            if (index < 0)
-                throw new IndexOutOfBoundsException("Can't get element at invalid position");
-            else
-            {
-                ListNode node = first;
-                for (int i = 0; i < index; i++)
-                    node = node.next;
-
-                node.remove();
-            }
+        getNodeAt(index).remove();
     }
 
     @Override
     public T get(int index)
     {
+        return getNodeAt(index).data;
+    }
+
+    ListNode getNodeAt(int index)
+    {
         if (index < 0)
             index = size + index;
 
-        if (index >= size)
-            throw new IndexOutOfBoundsException("Can't get element at invalid position");
-        else
-            if (index < 0)
-                throw new IndexOutOfBoundsException("Can't get element at invalid position");
-            else
-            {
-                ListNode node = first;
-                for (int i = 0; i < index; i++)
-                    node = node.next;
+        if (isEmpty())
+            throw new ListIsEmptyException("Empty list!");
 
-                return node.data;
-            }
+        if (index >= size)
+            throw new IndexOutOfBoundsException("Invalid index");
+
+        if (index < 0)
+            throw new IndexOutOfBoundsException("Invalid index");
+
+        ListNode node = first;
+        for (int i = 0; i < index; i++)
+            node = node.next;
+
+        return node;
     }
 
     @Override
@@ -250,48 +341,35 @@ public class LinkedList<T> implements ExtendedList<T>
         System.out.println(builder.toString());
     }
 
-    ListNode[] getNodes()
-    {
-        @SuppressWarnings("unchecked")
-        ListNode[] nodes = new LinkedList.ListNode[numberOfElements()];
-
-        if (nodes.length == 0)
-            return nodes;
-
-        ListNode current = first;
-
-        int i = 0;
-        do
-        {
-            nodes[i++] = current;
-        }
-        while ((current = current.next) != null);
-
-        return nodes;
-    }
-
     /**
      * Search for an element in the list <br>
      * <br>
      * Example: Removing all 'g' characters from the list by using search
+     * 
      * <pre>
      * <code>
      *  linkedList.search('g').remove();
      * </code>
      * </pre>
+     * 
      * Example: Count instances of character 'a'
+     * 
      * <pre>
      * <code>
      *  int count = linkedList.search('a').getSize();
      * </code>
      * </pre>
+     * 
      * Example: Check if the list contains 'b'
+     * 
      * <pre>
      * <code>
      *  boolean containsB = !linkedList.search('b').isEmpty();
      * </code>
      * </pre>
+     * 
      * Example: Iterate over results
+     * 
      * <pre>
      * <code>
      *  for(LinkedList<Integer>.Element element : testList.search(1000))
@@ -306,13 +384,16 @@ public class LinkedList<T> implements ExtendedList<T>
      * @return a {@link SearchResult} with the found elements
      * 
      */
+    @SuppressWarnings("unchecked")
     public SearchResult search(T element)
     {
         if (isEmpty())
             return new SearchResult();
         else
         {
-            LinkedList<ListNode> results = new LinkedList<ListNode>();
+            Object[] root = new Object[2];
+            Object[] curr = root;
+            int count = 0;
 
             ListNode current = first;
 
@@ -322,26 +403,66 @@ public class LinkedList<T> implements ExtendedList<T>
                 {
                     if (element == null)
                     {
-                        results.insertLast(current);
+                        curr[0] = current;
+                        curr[1] = curr = new Object[2];
+                        count++;
                     }
                 }
                 else
                 {
                     if (current.data.equals(element))
-                        results.insertLast(current);
+                    {
+                        curr[0] = current;
+                        curr[1] = curr = new Object[2];
+                        count++;
+                    }
                 }
 
             }
             while ((current = current.next) != null);
 
-            @SuppressWarnings("unchecked")
-            ListNode[] resultingNodes = new LinkedList.ListNode[results.numberOfElements()];
-            int i = 0;
-            for (LinkedList<ListNode>.ListNode node : results.getNodes())
-                resultingNodes[i++] = node.data;
+            curr = root;
+
+            ListNode[] resultingNodes = new LinkedList.ListNode[count];
+            for (int i = 0; i < count; i++)
+            {
+                resultingNodes[i] = (ListNode) curr[0];
+                curr = (Object[]) curr[1];
+            }
 
             return new SearchResult(resultingNodes);
         }
+    }
+
+    /**
+     * Get a element by index
+     * 
+     * @param index
+     *            the index of the element to get
+     * @throws ListIsEmptyException
+     *             if list is empty
+     * @return the element
+     */
+    public Element getElementAt(int index)
+    {
+        if (index < 0)
+            index = size + index;
+
+        return getNodeAt(index).getElement();
+    }
+
+    /**
+     * Get a random element from this list
+     * 
+     * @throws ListIsEmptyException
+     *             if list is empty
+     * @return the element
+     */
+    public Element getRandomElement()
+    {
+        if (isEmpty())
+            throw new ListIsEmptyException("Can't get random of empty list!");
+        return getNodeAt((int) (Math.random() * size)).getElement();
     }
 
     /**
@@ -352,7 +473,8 @@ public class LinkedList<T> implements ExtendedList<T>
      * <br>
      * It is possible to remove found elements by calling {@link Element#remove
      * remove} on the wrapper, or {@link SearchResult#remove remove} on this
-     * {@link SearchResult} to remove all findings from the list<br><br>
+     * {@link SearchResult} to remove all findings from the list<br>
+     * <br>
      * For examples see {@link LinkedList#search(Object)}
      * 
      * 
@@ -516,6 +638,33 @@ public class LinkedList<T> implements ExtendedList<T>
         ListNode(T data)
         {
             this.data = data;
+            size++;
+        }
+
+        void append(ListNode other)
+        {
+            other.next = next;
+            if (next != null)
+                next.prev = other;
+
+            other.prev = this;
+            next = other;
+
+            if (last == this)
+                last = other;
+        }
+
+        void prepend(ListNode other)
+        {
+            other.next = this;
+            other.prev = prev;
+
+            if (prev != null)
+                prev.next = other;
+            prev = other;
+
+            if (first == this)
+                first = other;
         }
 
         void remove()
@@ -533,6 +682,7 @@ public class LinkedList<T> implements ExtendedList<T>
                 last = prev;
 
             next = prev = null;
+
             size--;
         }
 

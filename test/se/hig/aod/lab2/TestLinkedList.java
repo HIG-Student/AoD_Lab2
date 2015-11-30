@@ -113,6 +113,54 @@ public class TestLinkedList
         assertEquals("Not correct count", 7, testList.numberOfElements());
         testList.removeLast();
         assertEquals("Not correct count", 6, testList.numberOfElements());
+        testList.getElementAt(3).remove();
+        assertEquals("Not correct count", 5, testList.numberOfElements());
+        testList.getElementAt(2).remove();
+        assertEquals("Not correct count", 4, testList.numberOfElements());
+    }
+
+    /**
+     * Lets check if getNodeAt works
+     */
+    @Test
+    public void testGetElementAt()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            testList.insertLast(i);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            assertEquals("Gets wrong value!", testList.getElementAt(i).data, (Integer) i);
+        }
+
+        for (int i = -1; i > -10; i--)
+        {
+            assertEquals("Gets wrong value from neg index!", testList.getElementAt(i).data, (Integer) (10 + i));
+        }
+    }
+    
+    /**
+     * Lets check if getNodeAt works
+     */
+    @Test
+    public void testGetNodeAt()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            testList.insertLast(i);
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            assertEquals("Gets wrong value!", testList.getNodeAt(i).data, (Integer) i);
+        }
+
+        for (int i = -1; i > -10; i--)
+        {
+            assertEquals("Gets wrong value from neg index!", testList.getNodeAt(i).data, (Integer) (10 + i));
+        }
     }
 
     /**
@@ -282,7 +330,7 @@ public class TestLinkedList
             assertEquals("Not correct get", (Integer) i, testList.get(i));
 
         for (int i = 1; i <= 11; i++)
-            assertEquals("Not correct get", (Integer) (10 - i + 1), testList.get(-i));
+            assertEquals("Not correct negative get", (Integer) (10 - i + 1), testList.get(-i));
 
         assertThrows(ExtendedList.IndexOutOfBoundsException.class, () ->
         {
@@ -301,26 +349,51 @@ public class TestLinkedList
     @Test
     public void testInsert()
     {
-        testList.insertLast(1);
         testList.insertLast(3);
         testList.insertLast(5);
         testList.insertLast(8);
         testList.insertLast(9);
 
-        testList.insert(-10, 0);
+        testList.insert(-5, 1);
+        testList.insert(-6, 0);
         testList.insert(2, 2);
         testList.insert(4, 4);
         testList.insert(6, 6);
-        testList.insert(-2, 7);
-        testList.insert(400, 10);
+        testList.insert(-3, 7);
+        testList.insert(-1, 10);
+        
+        assertThrows(ExtendedList.IndexOutOfBoundsException.class, () ->
+        {
+            testList.insert(-100, 0);
+        });
+        
+        assertThrows(ExtendedList.IndexOutOfBoundsException.class, () ->
+        {
+            testList.insert(400, 10);
+        });
 
         for (int i = 0; i <= 10; i++)
         {
             assertEquals("Not correct get", (Integer) i, testList.get(i));
         }
+    }
 
-        for (int i = 1; i <= 11; i++)
-            assertEquals("Not correct get", (Integer) (10 - i + 1), testList.get(-i));
+    /**
+     * Test insert multiple at index
+     */
+    @Test
+    public void testMultiInsert()
+    {
+        testList.insertLast(1);
+        testList.insertLast(4, 5);
+        testList.insertLast(9, 10, 11);
+
+        testList.insert(0, 0);
+        testList.insert(2, 2, 3);
+        testList.insert(-4, 6, 7, 8);
+
+        for (int i = 0; i <= 10; i++)
+            assertEquals("Not correct get", (Integer) i, testList.get(i));
     }
 
     /**
@@ -413,9 +486,6 @@ public class TestLinkedList
         String resultRecursive = checkSystemOut(() -> testList.printListR());
 
         assertEquals("Recursive and iterative should give same result!", resultIterative, resultRecursive);
-
-        testList.printListR();
-        testList.reversePrintList();
     }
 
     /**
