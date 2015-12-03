@@ -417,7 +417,6 @@ public class LinkedList<T> implements ExtendedList<T>
                         count++;
                     }
                 }
-
             }
             while ((current = current.next) != null);
 
@@ -432,6 +431,70 @@ public class LinkedList<T> implements ExtendedList<T>
 
             return new SearchResult(resultingNodes);
         }
+    }
+
+    /**
+     * Same as {@link #search(Object)} but recursive
+     * 
+     * @param element
+     *            the element to search for
+     * @return the result
+     * 
+     * @see #search(Object)
+     */
+    public SearchResult searchRecursive(T element)
+    {
+        class RecursiveSearch
+        {
+            T searchFor;
+
+            RecursiveSearch(T element)
+            {
+                searchFor = element;
+            }
+
+            int count = 0;
+            ListNode[] hits;
+
+            @SuppressWarnings("unchecked")
+            ListNode[] doSubSearch(ListNode current)
+            {
+                if (current == null)
+                {
+                    hits = new LinkedList.ListNode[count];
+                }
+                else
+                {
+                    int index = -1;
+
+                    if (current.data == null)
+                    {
+                        if (searchFor == null)
+                        {
+                            index = count++;
+                        }
+                    }
+                    else
+                        if (current.data.equals(searchFor))
+                        {
+                            index = count++;
+                        }
+
+                    doSubSearch(current.next);
+
+                    if (index != -1)
+                        hits[index] = current;
+                }
+                return hits;
+            }
+
+            SearchResult doSearch()
+            {
+                return new SearchResult(doSubSearch(first));
+            }
+        }
+
+        return new RecursiveSearch(element).doSearch();
     }
 
     /**
