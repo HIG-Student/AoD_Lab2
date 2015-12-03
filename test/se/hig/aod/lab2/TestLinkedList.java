@@ -140,7 +140,7 @@ public class TestLinkedList
             assertEquals("Gets wrong value from neg index!", testList.getElementAt(i).data, (Integer) (10 + i));
         }
     }
-    
+
     /**
      * Lets check if getNodeAt works
      */
@@ -361,12 +361,12 @@ public class TestLinkedList
         testList.insert(6, 6);
         testList.insert(-3, 7);
         testList.insert(-1, 10);
-        
+
         assertThrows(ExtendedList.IndexOutOfBoundsException.class, () ->
         {
             testList.insert(-100, 0);
         });
-        
+
         assertThrows(ExtendedList.IndexOutOfBoundsException.class, () ->
         {
             testList.insert(400, 10);
@@ -533,6 +533,19 @@ public class TestLinkedList
     }
 
     /**
+     * Test recursive search
+     */
+    @Test
+    public void testRecursiveSearch()
+    {
+        testList.insertFirst(1000);
+        populate();
+        testList.insertLast(1000);
+
+        assertEquals("Can't find the elements", 2, testList.searchRecursive(1000).getSize());
+    }
+
+    /**
      * Test to use search for removing elements
      */
     @Test
@@ -593,6 +606,24 @@ public class TestLinkedList
         stack.addLast(3333);
 
         for (LinkedList<Integer>.Element element : testList.search(1000))
+        {
+            assertEquals("Incorrect search result!", stack.pop(), element.data);
+        }
+    }
+
+    /**
+     * Test recursive search iterate
+     */
+    @Test
+    public void testRecursiveSearchIterate()
+    {
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+        stack.addLast(1111);
+        stack.addLast(2222);
+        populate();
+        stack.addLast(3333);
+
+        for (LinkedList<Integer>.Element element : testList.searchRecursive(1000))
         {
             assertEquals("Incorrect search result!", stack.pop(), element.data);
         }
