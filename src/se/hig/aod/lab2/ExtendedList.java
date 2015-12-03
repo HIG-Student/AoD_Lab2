@@ -14,8 +14,7 @@ public interface ExtendedList<T> extends List<T>
     /**
      * Insert an element at index<br>
      * Negative index starts from the end of the list (-1 is last element,-2 is
-     * the one before the last element)<br>
-     * If index is greater than list size, the element is put last in the list
+     * the one before the last element)
      * 
      * @param index
      *            to insert at
