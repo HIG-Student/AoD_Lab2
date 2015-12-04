@@ -4,22 +4,24 @@ package se.hig.aod.lab2;
  * A queue that uses an fixed-size array to store element
  * 
  * 
- * @param <V> type to store
+ * @param <V>
+ *            type to store
  * 
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
 public class ArrayQueue<V> implements Queue<V>
 {
-    int maxSize;
-    int insertAt;
-    int takeAt;
-    boolean full = false;
-    Object[] array;
+    private int maxSize;
+    private int insertAt;
+    private int takeAt;
+    private boolean full = false;
+    private Object[] array;
 
     /**
      * Create ArrayQueue of specified size
      * 
-     * @param maxSize the size of the ArrayQueue
+     * @param maxSize
+     *            the size of the ArrayQueue
      */
     public ArrayQueue(int maxSize)
     {
@@ -58,6 +60,9 @@ public class ArrayQueue<V> implements Queue<V>
         if (isFull())
             throw new QueueIsFullException("Can't put stuff in a full queue!");
 
+        if (v == null)
+            throw new WrongTypeException("You can't put null values into this stack"); 
+
         array[insertAt] = v;
         insertAt = (insertAt + 1) % maxSize;
         if (insertAt == takeAt)
@@ -76,7 +81,7 @@ public class ArrayQueue<V> implements Queue<V>
         full = false;
         return toTake;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public V getFront()
@@ -122,6 +127,26 @@ public class ArrayQueue<V> implements Queue<V>
          *            that describes the error
          */
         public QueueIsEmptyException(String message)
+        {
+            super(message);
+        }
+    }
+
+    /**
+     * Exception that signals that the provided element is of wrong type
+     * 
+     * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
+     */
+    @SuppressWarnings("serial")
+    public static class WrongTypeException extends RuntimeException
+    {
+        /**
+         * Construct
+         * 
+         * @param message
+         *            that describes the error
+         */
+        public WrongTypeException(String message)
         {
             super(message);
         }

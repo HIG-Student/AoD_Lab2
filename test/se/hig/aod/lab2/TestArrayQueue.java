@@ -56,7 +56,7 @@ public class TestArrayQueue
      * empty queue, lets check
      */
     @Test(expected = ArrayQueue.QueueIsEmptyException.class)
-    public void testPopOnEmptyQueue()
+    public void testDequeueOnEmptyQueue()
     {
         testQueue.dequeue();
     }
@@ -65,7 +65,7 @@ public class TestArrayQueue
      * The queue should be empty if you remove stuff you put in, lets check
      */
     @Test
-    public void testQueueIsEmptyAfterPop()
+    public void testQueueIsEmptyAfterDequeue()
     {
         testQueue.enqueue('a');
         testQueue.dequeue();
@@ -77,7 +77,7 @@ public class TestArrayQueue
      * queue, lets check
      */
     @Test(expected = ArrayQueue.QueueIsEmptyException.class)
-    public void testTopOnEmptyQueue()
+    public void testFrontOnEmptyQueue()
     {
         testQueue.getFront();
     }
@@ -87,7 +87,7 @@ public class TestArrayQueue
      * lets check
      */
     @Test
-    public void testTop()
+    public void testFront()
     {
         for (Character c : fixture)
         {
@@ -102,7 +102,7 @@ public class TestArrayQueue
      * The queue should be First-In Last-Out, lets check
      */
     @Test
-    public void testPopOrder()
+    public void testDequeueOrder()
     {
         for (int i = 0; i < fixture.length; i++)
         {

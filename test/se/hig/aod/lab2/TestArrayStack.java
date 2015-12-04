@@ -163,21 +163,33 @@ public class TestArrayStack
         {
             testStack.push('n');
         });
-        
+
         testStack.pop();
         assertFalse("Not-full stack is full!", testStack.isFull());
         testStack.pop();
         testStack.pop();
-        
+
         testStack.push('a');
         testStack.push('b');
         testStack.push('c');
-        
+
         assertTrue("Full stack is not full!", testStack.isFull());
 
         assertThrows(ArrayStack.StackIsFullException.class, () ->
         {
             testStack.push('n');
+        });
+    }
+
+    /**
+     * Test adding incorrect type
+     */
+    @Test
+    public void testAddIncorrectType()
+    {
+        assertThrows(ArrayStack.WrongTypeException.class, () ->
+        {
+            testStack.push(null);
         });
     }
 }

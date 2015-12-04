@@ -14,11 +14,11 @@ import java.util.NoSuchElementException;
 @SuppressWarnings("hiding")
 public class LinkedList<T> implements ExtendedList<T>
 {
-    ListNode first;
+    private ListNode first;
 
-    ListNode last;
+    private ListNode last;
 
-    int size = 0;
+    private int size = 0;
 
     @Override
     public boolean isEmpty()
