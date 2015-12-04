@@ -4,7 +4,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A double-linked list
+ * A double-linked list<br>
+ * <br>
+ * For-each iteration available<br>
+ * 
+ * Example:
+ * <pre>
+ * <code>
+ *  for(T element : list)
+ *      System.out.println(element);
+ * </code>
+ * </pre>
  * 
  * @param <T>
  *            type to store
@@ -12,7 +22,7 @@ import java.util.NoSuchElementException;
  * @author Viktor Hanstorp (ndi14vhp@student.hig.se)
  */
 @SuppressWarnings("hiding")
-public class LinkedList<T> implements ExtendedList<T>
+public class LinkedList<T> implements ExtendedList<T> , Iterable<T>
 {
     private ListNode first;
 
@@ -783,5 +793,82 @@ public class LinkedList<T> implements ExtendedList<T>
 
             return builder;
         }
+    }
+
+    @Override
+    public Iterator<T> iterator()
+    {
+        return new ListNodeIterator();
+    }
+
+    class ListNodeIterator implements Iterator<T>
+    {
+        int index = 0;
+
+        @Override
+        public boolean hasNext()
+        {
+            return !isEmpty() && index < numberOfElements();
+        }
+
+        @Override
+        public T next()
+        {
+            if (!hasNext())
+                throw new NoSuchElementException();
+
+            return get(index++);
+        }
+    }
+
+    class LinkedListReverse implements Iterable<T>
+    {
+        @Override
+        public Iterator<T> iterator()
+        {
+            return new LinkedListReverseIterator();
+        }
+
+        class LinkedListReverseIterator implements Iterator<T>
+        {
+            int index = numberOfElements() - 1;
+
+            @Override
+            public boolean hasNext()
+            {
+                return !isEmpty() && index >= 0;
+            }
+
+            @Override
+            public T next()
+            {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+
+                return get(index--);
+            }
+        }
+    }
+
+    /**
+     * Get an reverse iterator for this list<br>
+     * <br>
+     * To be used in a for-each loop for iterate this list in reverse order<br>
+     * <br>
+     * 
+     * Example: For-each iteration
+     * 
+     * <pre>
+     * <code>
+     *  for(T element : list.getReverseIterator())
+     *      System.out.println(element);
+     * </code>
+     * </pre>
+     * 
+     * @return the iterator
+     */
+    public LinkedListReverse getReverseIterator()
+    {
+        return new LinkedListReverse();
     }
 }

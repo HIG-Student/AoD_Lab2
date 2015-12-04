@@ -628,4 +628,56 @@ public class TestLinkedList
             assertEquals("Incorrect search result!", stack.pop(), element.data);
         }
     }
+
+    /**
+     * Test for-each iterate
+     */
+    @Test
+    public void testForEachIterate()
+    {
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+
+        for (int i = 0; i < 20; i += 2)
+        {
+            stack.addLast(i);
+            testList.insertLast(i);
+        }
+
+        int excpectedCount = stack.size();
+        int count = 0;
+
+        for (Integer i : testList)
+        {
+            assertEquals("Incorrect iteration!", stack.pop(), i);
+            count++;
+        }
+
+        assertEquals("Missed elements!", excpectedCount, count);
+    }
+
+    /**
+     * Test for-each reverse iterate
+     */
+    @Test
+    public void testForEachReverseIterate()
+    {
+        Deque<Integer> stack = new ArrayDeque<Integer>();
+
+        for (int i = 0; i < 20; i += 2)
+        {
+            stack.addFirst(i);
+            testList.insertLast(i);
+        }
+
+        int excpectedCount = stack.size();
+        int count = 0;
+
+        for (Integer i : testList.getReverseIterator())
+        {
+            assertEquals("Incorrect iteration!", stack.pop(), i);
+            count++;
+        }
+
+        assertEquals("Missed elements!", excpectedCount, count);
+    }
 }
