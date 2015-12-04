@@ -54,6 +54,11 @@ public class ArrayStack<V> implements Stack<V>
      * {@inheritDoc}<br>
      * <br>
      * "null" is not allowed
+     * 
+     * @throws StackIsFullException
+     *             if the list is full
+     * @throws WrongTypeException
+     *             if "null" is inserted
      **/
     @Override
     public void push(V v)
@@ -67,6 +72,12 @@ public class ArrayStack<V> implements Stack<V>
         array[size++] = v;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws StackIsEmptyException
+     *             if empty
+     **/
     @SuppressWarnings("unchecked")
     @Override
     public V pop()
@@ -77,6 +88,12 @@ public class ArrayStack<V> implements Stack<V>
         return (V) array[size-- - 1];
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws StackIsEmptyException
+     *             if empty
+     **/
     @SuppressWarnings("unchecked")
     @Override
     public V top()

@@ -382,7 +382,7 @@ public class LinkedList<T> implements ExtendedList<T> , Iterable<T>
      * 
      * <pre>
      * <code>
-     *  for(LinkedList<Integer>.Element element : testList.search(1000))
+     *  for(LinkedList{@literal <Integer>}.Element element : testList.search(1000))
      *  {
      *      System.out.println(element);
      *  }

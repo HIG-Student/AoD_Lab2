@@ -58,13 +58,18 @@ public class ArrayQueue<V> implements Queue<V>
      * {@inheritDoc}<br>
      * <br>
      * "null" is not allowed
+     * 
+     * @throws QueueIsFullException
+     *             if the list is full
+     * @throws WrongTypeException
+     *             if "null" is inserted
      **/
     @Override
     public void enqueue(V v)
     {
         if (isFull())
             throw new QueueIsFullException("Can't put stuff in a full queue!");
-        
+
         if (v == null)
             throw new WrongTypeException("You can't put null values into this stack");
 
@@ -74,6 +79,12 @@ public class ArrayQueue<V> implements Queue<V>
             full = true;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws QueueIsEmptyException
+     *             if empty
+     **/
     @SuppressWarnings("unchecked")
     @Override
     public V dequeue()
@@ -87,6 +98,12 @@ public class ArrayQueue<V> implements Queue<V>
         return toTake;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @throws QueueIsEmptyException
+     *             if empty
+     **/
     @SuppressWarnings("unchecked")
     @Override
     public V getFront()
