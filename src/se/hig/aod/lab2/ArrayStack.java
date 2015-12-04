@@ -50,6 +50,11 @@ public class ArrayStack<V> implements Stack<V>
         return size == maxSize;
     }
 
+    /**
+     * {@inheritDoc}<br>
+     * <br>
+     * "null" is not allowed
+     **/
     @Override
     public void push(V v)
     {

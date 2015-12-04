@@ -54,14 +54,19 @@ public class ArrayQueue<V> implements Queue<V>
         return full;
     }
 
+    /**
+     * {@inheritDoc}<br>
+     * <br>
+     * "null" is not allowed
+     **/
     @Override
     public void enqueue(V v)
     {
         if (isFull())
             throw new QueueIsFullException("Can't put stuff in a full queue!");
-
+        
         if (v == null)
-            throw new WrongTypeException("You can't put null values into this stack"); 
+            throw new WrongTypeException("You can't put null values into this stack");
 
         array[insertAt] = v;
         insertAt = (insertAt + 1) % maxSize;
